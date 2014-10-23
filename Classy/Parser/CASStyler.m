@@ -130,8 +130,8 @@ NSArray *ClassGetSubclasses(Class parentClass) {
     }
 }
 
-- (void)setFilePath:(NSString *)filePath error:(NSError **)error {
-    if ([_filePath isEqualToString:filePath]) return;
+- (BOOL)setFilePath:(NSString *)filePath error:(NSError **)error {
+    if ([_filePath isEqualToString:filePath]) return YES;
     _filePath = filePath;
     
     self.styleClassIndex = [NSMutableDictionary new];
@@ -155,7 +155,7 @@ NSArray *ClassGetSubclasses(Class parentClass) {
     
     
     if (!styleNodes.count) {
-        return;
+        return YES;
     }
     
     self.styleNodes = [self validNodes:styleNodes];
@@ -185,6 +185,8 @@ NSArray *ClassGetSubclasses(Class parentClass) {
         }
         styleNode.invocations = invocations;
     }
+    
+    return YES;
 }
 
 #pragma mark - private
@@ -407,12 +409,26 @@ NSArray *ClassGetSubclasses(Class parentClass) {
         @"truncatingMiddle" : @(NSLineBreakByTruncatingMiddle)
     };
 
-    NSDictionary *barMetricsMap = @{
-        @"default"                : @(UIBarMetricsDefault),
-        @"landscapePhone"        : @(UIBarMetricsLandscapePhone),
-        @"defaultPrompt"         : @(UIBarMetricsDefaultPrompt),
-        @"landscapePhonePrompt" : @(UIBarMetricsLandscapePhonePrompt),
-    };
+    NSDictionary *barMetricsMap = nil;
+    
+    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_7_1){
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+        barMetricsMap = @{
+                          @"default"                : @(UIBarMetricsDefault),
+                          @"landscapePhone"        : @(UIBarMetricsLandscapePhone),
+                          @"defaultPrompt"         : @(UIBarMetricsDefaultPrompt),
+                          @"landscapePhonePrompt" : @(UIBarMetricsLandscapePhonePrompt),
+                          };
+#pragma GCC diagnostic pop
+    }else{
+        barMetricsMap = @{
+                          @"default"                : @(UIBarMetricsDefault),
+                          @"landscapePhone"        : @(UIBarMetricsCompact),
+                          @"defaultPrompt"         : @(UIBarMetricsDefaultPrompt),
+                          @"landscapePhonePrompt" : @(UIBarMetricsCompactPrompt),
+                          };
+    }
 
     NSDictionary *searchBarIconMap = @{
         @"search"       : @(UISearchBarIconSearch),

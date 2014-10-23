@@ -175,7 +175,10 @@
     NSMutableArray *values = NSMutableArray.new;
     for (CASToken *token in tokens) {
         if (token.value == (id)NSNull.null) {
-            [values addObject:placeholderToken.stringValue];
+            NSString *strvalue = placeholderToken.stringValue;
+            if(strvalue){
+                [values addObject:strvalue];                
+            }
         } else {
             [values addObject:token.stringValue];
         }

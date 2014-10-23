@@ -116,9 +116,11 @@ NSString * const CASParseFailingStringErrorKey = @"CASParseFailingStringErrorKey
     NSInteger fetch = count - self.stash.count;
     while (fetch > 0) {
         CASToken *token = self.advanceToken;
-        [self attachDebugInfoForToken:token];
-        [self.stash addObject:token];
-        fetch = count - self.stash.count;
+        if(token){
+            [self attachDebugInfoForToken:token];
+            [self.stash addObject:token];
+            fetch = count - self.stash.count;            
+        }
     }
     return self.stash[count-1];
 }

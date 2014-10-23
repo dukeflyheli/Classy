@@ -415,11 +415,13 @@ NSInteger const CASParseErrorFileContents = 2;
         NSMutableArray *valueTokens = NSMutableArray.new;
         NSInteger nonWhitespaceTokenCount = 0;
         while (token.type != CASTokenTypeNewline && token.type != CASTokenTypeSemiColon && token.type != CASTokenTypeEOS) {
-            [valueTokens addObject:token];
-            if (!token.isWhitespace) {
-                nonWhitespaceTokenCount++;
+            if (token){
+                [valueTokens addObject:token];
+                if (!token.isWhitespace) {
+                    nonWhitespaceTokenCount++;
+                }
+                token = [self nextToken];                
             }
-            token = [self nextToken];
         }
 
         // only wrap in braces if more than one non-whitespace token present

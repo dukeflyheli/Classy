@@ -36,7 +36,7 @@
  *  @param filePath The location of the style data
  *  @param error    The error that occurred while parsing the filePath
  */
-- (void)setFilePath:(NSString *)filePath error:(NSError **)error;
+- (BOOL)setFilePath:(NSString *)filePath error:(NSError **)error;
 
 /**
  *  Apply any applicable styles to a CASStyleableItem instance, from low to high precendence
