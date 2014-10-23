@@ -137,7 +137,7 @@ NSArray *ClassGetSubclasses(Class parentClass) {
     self.styleClassIndex = [NSMutableDictionary new];
     self.objectClassIndex = [NSMutableDictionary new];
     
-    CASParser *parser = [CASParser parserFromFilePath:filePath variables:self.variables error:error];
+    CASParser *parser = [CASParser parserFromFilePath:filePath variables:self.variables modulesToCheck:self.classModulesToCheck error:error];
     NSArray *styleNodes = parser.styleNodes;
     
     if (self.watchFilePath) {

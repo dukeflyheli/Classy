@@ -26,6 +26,7 @@ NSInteger const CASParseErrorFileContents = 2;
 @property (nonatomic, strong) NSMutableDictionary *styleVars;
 @property (nonatomic, strong) NSError *error;
 @property (nonatomic, copy) NSString *filePath;
+@property (nonatomic, strong) NSSet *classModulesToCheck;
 
 @end
 
@@ -33,7 +34,7 @@ NSInteger const CASParseErrorFileContents = 2;
     NSMutableSet *_importedFileNames;
 }
 
-+ (CASParser *)parserFromFilePath:(NSString *)filePath variables:(NSDictionary *)variables error:(NSError **)error {
++ (CASParser *)parserFromFilePath:(NSString *)filePath variables:(NSDictionary *)variables modulesToCheck:(NSSet*)classModulesToCheck error:(NSError **)error{
     NSError *fileError = nil;
     NSString *contents = [NSString stringWithContentsOfFile:filePath
                                                    encoding:NSUTF8StringEncoding
@@ -59,6 +60,7 @@ NSInteger const CASParseErrorFileContents = 2;
     CASLog(@"Start parsing file \n%@", filePath);
     NSError *parseError = nil;
     CASParser *parser = CASParser.new;
+    parser.classModulesToCheck = classModulesToCheck;
     parser.filePath = filePath;
     parser.styleVars = NSMutableDictionary.new;
 
@@ -172,7 +174,7 @@ NSInteger const CASParseErrorFileContents = 2;
             [_importedFileNames addObject:fileName];
             NSString *filePath = [[self.filePath stringByDeletingLastPathComponent] stringByAppendingPathComponent:fileName];
             NSError *importError = nil;
-            CASParser *parser = [CASParser parserFromFilePath:filePath variables:self.styleVars error:&importError];
+            CASParser *parser = [CASParser parserFromFilePath:filePath variables:self.styleVars modulesToCheck:self.classModulesToCheck error:&importError];
             if (importError) {
                 if (error) {
                     *error = importError;
@@ -642,7 +644,17 @@ NSInteger const CASParseErrorFileContents = 2;
             if ([tokenValue hasPrefix:@"."]) {
                 styleSelector.styleClass = [tokenValue substringFromIndex:1];
             } else {
-                styleSelector.objectClass = NSClassFromString(tokenValue);
+                __block id class = NSClassFromString(tokenValue);
+                if (!class){
+                    [self.classModulesToCheck enumerateObjectsUsingBlock:^(NSString *obj, BOOL *stop) {
+                        NSString *comps = [@[obj,tokenValue] componentsJoinedByString:@"."];
+                        class = NSClassFromString(comps);
+                        if(class){
+                            *stop = YES;
+                        }
+                    }];
+                }
+                styleSelector.objectClass = class;
             }
 
             if (!styleSelector.objectClass && !shouldConcatToParent) {

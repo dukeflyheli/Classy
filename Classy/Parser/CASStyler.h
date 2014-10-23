@@ -65,4 +65,7 @@
  */
 - (void)unscheduleUpdateForItem:(id<CASStyleableItem>)item;
 
+
+@property (nonatomic, strong) NSSet *classModulesToCheck;
+
 @end
