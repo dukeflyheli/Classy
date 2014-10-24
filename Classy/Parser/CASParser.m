@@ -416,7 +416,16 @@ NSInteger const CASParseErrorFileContents = 2;
         NSInteger nonWhitespaceTokenCount = 0;
         while (token.type != CASTokenTypeNewline && token.type != CASTokenTypeSemiColon && token.type != CASTokenTypeEOS) {
             if (token){
-                [valueTokens addObject:token];
+                if(token.value && [token.value isKindOfClass:[NSString class]]){
+                    CASStyleProperty *prop = self.styleVars[token.value];
+                    if (prop) {
+                        [valueTokens addObjectsFromArray:prop.valueTokens];
+                    }else{
+                        [valueTokens addObject:token];
+                    }
+                }else{
+                    [valueTokens addObject:token];
+                }
                 if (!token.isWhitespace) {
                     nonWhitespaceTokenCount++;
                 }
