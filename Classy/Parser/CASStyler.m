@@ -18,6 +18,24 @@
 #import "CASInvocation.h"
 #import <objc/runtime.h>
 
+
+@interface UIView (Layout)
+
+- (void)setNeedsLayoutRecursively;
+
+@end
+
+@implementation UIView (Layout)
+
+- (void)setNeedsLayoutRecursively {
+    for (UIView *view in self.subviews) {
+        [view setNeedsLayoutRecursively];
+    }
+    [self setNeedsLayout];
+}
+
+@end
+
 // http://www.cocoawithlove.com/2010/01/getting-subclasses-of-objective-c-class.html
 NSArray *ClassGetSubclasses(Class parentClass) {
     int numClasses = objc_getClassList(NULL, 0);
@@ -764,6 +782,10 @@ NSArray *ClassGetSubclasses(Class parentClass) {
             // reapply styles
             for (UIWindow *window in UIApplication.sharedApplication.windows) {
                 [self styleSubviewsOfView:window];
+            }
+            
+            for (UIWindow *window in UIApplication.sharedApplication.windows) {
+                [window setNeedsLayoutRecursively];
             }
         });
     }];
