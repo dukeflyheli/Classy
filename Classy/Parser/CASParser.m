@@ -665,6 +665,16 @@ NSInteger const CASParseErrorFileContents = 2;
                         }
                     }];
                 }
+                if (!class){
+                    NSString *lastresort = @"IVLib";
+                    [self.classModulesToCheck enumerateObjectsUsingBlock:^(NSString *obj, BOOL *stop) {
+                        NSString *comps = [@[obj,lastresort] componentsJoinedByString:@"."];
+                        class = NSClassFromString(comps);
+                        if(class){
+                            *stop = YES;
+                        }
+                    }];
+                }
                 styleSelector.objectClass = class;
             }
 
