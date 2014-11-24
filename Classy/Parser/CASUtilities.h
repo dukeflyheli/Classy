@@ -14,6 +14,7 @@
 #else
 #   define CASLog(...)
 #endif
+#   define CASLog(...)
 
 // Keypath compile check
 #define cas_propertykey(classname, property) \
