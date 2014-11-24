@@ -112,7 +112,12 @@ NSArray *ClassGetSubclasses(Class parentClass) {
     
     NSArray *styleClasses = [item.cas_styleClass componentsSeparatedByString:CASStyleClassSeparator];
     for (NSString *styleClass in styleClasses.reverseObjectEnumerator) {
-        [possibleStyleNodes addObjectsFromArray:[self.styleClassIndex valueForKey:styleClass]];
+        if ([styleClass isEqualToString:@"cas-ignore"]) {
+            [possibleStyleNodes removeAllObjects];
+            break;
+        }else{
+            [possibleStyleNodes addObjectsFromArray:[self.styleClassIndex valueForKey:styleClass]];
+        }
     }
     
     for (CASStyleNode *styleNode in possibleStyleNodes) {
