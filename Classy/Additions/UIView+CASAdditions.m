@@ -78,6 +78,14 @@ static void *CASStyleHasBeenUpdatedKey = &CASStyleHasBeenUpdatedKey;
     }
 }
 
+- (void)cas_updateStylingForce {
+    [CASStyler.defaultStyler styleItem:self];
+    
+    for (UIView *view in self.subviews) {
+        [view cas_updateStylingForce];
+    }
+}
+
 - (void)cas_updateStyling {
     if (self.window) {
         [CASStyler.defaultStyler styleItem:self];

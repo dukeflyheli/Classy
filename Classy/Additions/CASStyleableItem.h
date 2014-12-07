@@ -70,4 +70,6 @@ extern NSString *const CASStyleClassSeparator;
  */
 - (void)cas_setNeedsUpdateStyling;
 
+- (void)cas_updateStylingForce;
+
 @end
