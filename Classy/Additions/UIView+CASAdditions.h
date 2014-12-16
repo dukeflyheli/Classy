@@ -14,5 +14,6 @@
 @property (nonatomic, weak, readwrite) id<CASStyleableItem> cas_alternativeParent;
 
 - (void)cas_setNeedsUpdateStylingForSubviews;
+- (void)cas_updateStylingRecursively;
 
 @end

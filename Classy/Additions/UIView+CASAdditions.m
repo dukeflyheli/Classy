@@ -34,6 +34,14 @@ static void *CASStyleHasBeenUpdatedKey = &CASStyleHasBeenUpdatedKey;
         [view cas_setNeedsUpdateStylingForSubviews];
     }
 }
+- (void)cas_updateStylingRecursively {
+
+    [self cas_updateStylingForce];
+
+    for (UIView *view in self.subviews) {
+        [view cas_updateStylingRecursively];
+    }
+}
 
 #pragma mark - CASStyleableItem
 
