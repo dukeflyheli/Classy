@@ -111,7 +111,7 @@ NSArray *ClassGetSubclasses(Class parentClass) {
     [possibleStyleNodes addObjectsFromArray:[self.objectClassIndex valueForKey:NSStringFromClass(class)]];
     
     NSArray *styleClasses = [item.cas_styleClass componentsSeparatedByString:CASStyleClassSeparator];
-    for (NSString *styleClass in styleClasses.reverseObjectEnumerator) {
+    for (NSString *styleClass in styleClasses) {
         if ([styleClass isEqualToString:@"cas-ignore"]) {
             [possibleStyleNodes removeAllObjects];
             break;
@@ -308,8 +308,23 @@ NSArray *ClassGetSubclasses(Class parentClass) {
                 break;
             }
             case CASPrimitiveTypeDouble: {
-                CGFloat value = [[styleProperty valueOfTokenType:CASTokenTypeUnit] doubleValue];
-                [invocation setArgument:&value atIndex:argIndex];
+                NSMethodSignature *sig = invocation.methodSignature;
+                const char* type = [sig getArgumentTypeAtIndex:argIndex];
+                switch (type[0]) {
+                    case 'f':
+                    {
+                        float value = [[styleProperty valueOfTokenType:CASTokenTypeUnit] floatValue];
+                        [invocation setArgument:&value atIndex:argIndex];
+
+                    }
+                        break;
+                    default:
+                    {
+                        CGFloat value = [[styleProperty valueOfTokenType:CASTokenTypeUnit] doubleValue];
+                        [invocation setArgument:&value atIndex:argIndex];                        
+                    }
+                        break;
+                }
                 break;
             }
             case CASPrimitiveTypeCGSize: {

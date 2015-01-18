@@ -34,6 +34,10 @@ NSInteger const CASParseErrorFileContents = 2;
     NSMutableSet *_importedFileNames;
 }
 
++ (CASParser *)parserFromFilePath:(NSString *)filePath variables:(NSDictionary *)variables error:(NSError **)error{
+    return [self parserFromFilePath:filePath variables:variables modulesToCheck:nil error:error];
+}
+
 + (CASParser *)parserFromFilePath:(NSString *)filePath variables:(NSDictionary *)variables modulesToCheck:(NSSet*)classModulesToCheck error:(NSError **)error{
     NSError *fileError = nil;
     NSString *contents = [NSString stringWithContentsOfFile:filePath

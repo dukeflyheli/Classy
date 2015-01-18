@@ -17,7 +17,6 @@
 #import "CASStyleNode.h"
 #import "UIDevice+CASMockDevice.h"
 
-
 @interface CASStyler ()
 @property (nonatomic, strong) NSMutableArray *styleNodes;
 @end
