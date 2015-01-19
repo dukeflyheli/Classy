@@ -10,11 +10,11 @@
 
 // Logging
 #ifdef DEBUG
-#   define CASLog(fmt, ...) NSLog((@"[Classy] %s " fmt), __PRETTY_FUNCTION__, ##__VA_ARGS__);
+//#   define CASLog(fmt, ...) NSLog((@"[Classy] %s " fmt), __PRETTY_FUNCTION__, ##__VA_ARGS__);
+#   define CASLog(...)
 #else
 #   define CASLog(...)
 #endif
-#   define CASLog(...)
 
 // Keypath compile check
 #define cas_propertykey(classname, property) \
